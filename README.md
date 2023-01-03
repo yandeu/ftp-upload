@@ -19,3 +19,7 @@ Example:
 ```bash
 ./ftp-upload --dir www --user test@demo.com -p SOME_PASSWORD -H your.website.com:21
 ```
+
+Download:
+
+- https://github.com/yandeu/ftp-upload/releases
