@@ -7,13 +7,12 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [master]
+    tags: ['v*']
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
 
     # Map a step output to a job output
     outputs:
