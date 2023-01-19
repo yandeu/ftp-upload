@@ -17,7 +17,13 @@ Options:
 Example:
 
 ```bash
-./ftp-upload --dir www --user test@demo.com -p SOME_PASSWORD -H your.website.com:21
+# upload the www folder and its content
+./ftp-upload --dir 'www' --user 'test@demo.com' -p 'SOME_PASSWORD' -H 'your.website.com:21'
+```
+
+```bash
+# upload only the content of the www folder
+./ftp-upload --dir 'www/*' --user 'test@demo.com' -p 'SOME_PASSWORD' -H 'your.website.com:21'
 ```
 
 Download:

@@ -15,10 +15,14 @@ jobs:
         with:
           command: build
           args: --release --all-features
-      - run: |
+      - name: Move ftp-upload
+        run: |
           mv target/release/ftp-upload ftp-upload
           ./ftp-upload --help
-          ./ftp-upload --dir test --user  ${{ secrets.USER }} --password  ${{ secrets.PWD }} --host  ${{ secrets.HOST }}
+      - name: Upload test
+        run: ./ftp-upload --dir 'test' --user '${{ secrets.USER }}' --password '${{ secrets.PWD }}' --host '${{ secrets.HOST }}'
+      - name: Upload test/www/*
+        run: ./ftp-upload --dir 'test/www/*' --user '${{ secrets.USER }}' --password '${{ secrets.PWD }}' --host '${{ secrets.HOST }}'
 
   x86_64-unknown-linux-musl:
     needs: build_and_test
@@ -41,4 +45,4 @@ jobs:
       - run: |
           mv target/x86_64-unknown-linux-musl/release/ftp-upload ftp-upload
           ./ftp-upload --help
-          ./ftp-upload --dir test --user  ${{ secrets.USER }} --password  ${{ secrets.PWD }} --host  ${{ secrets.HOST }}
+          ./ftp-upload --dir 'test' --user '${{ secrets.USER }}' --password '${{ secrets.PWD }}' --host '${{ secrets.HOST }}'

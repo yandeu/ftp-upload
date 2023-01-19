@@ -10,7 +10,6 @@ use suppaftp::rustls::{self, ClientConfig};
 use suppaftp::FtpStream;
 
 #[derive(Parser, Debug)]
-// #[command(author, version, about, long_about = None)]
 struct Args {
     #[arg(short, long)]
     dir: String,
@@ -28,8 +27,17 @@ fn main() {
     let args = Args::parse();
     let silent = args.silent.unwrap_or(false);
 
+    // check if dir ands with /*
+    let mut dir = args.dir.to_string();
+    let mut include_dir = true;
+    if args.dir.ends_with("/*") {
+        dir.pop();
+        dir.pop();
+        include_dir = false;
+    }
+
     let mut all_files: Vec<String> = Vec::new();
-    read_dir_recursive(args.dir, &mut all_files, silent);
+    read_dir_recursive(&dir, &mut all_files, silent);
 
     let mut paths_created: BTreeMap<String, &str> = BTreeMap::new();
 
@@ -51,7 +59,7 @@ fn main() {
     let mut percent = 0f64;
     let len = all_files.len();
 
-    for (i, file) in all_files.into_iter().enumerate() {
+    for (i, mut file) in all_files.into_iter().enumerate() {
         if (i as f64 / len as f64) * 100f64 > percent + 10f64 {
             percent = i as f64 / len as f64;
             if !silent {
@@ -61,6 +69,10 @@ fn main() {
 
         let f = File::open(&file).unwrap();
         let mut reader = BufReader::new(f);
+
+        if !include_dir {
+            file = file.split_at(dir.len() + 1).1.to_string();
+        }
 
         let mut paths = file.split('/').collect::<Vec<&str>>();
         let file = paths.pop().unwrap();
