@@ -29,3 +29,20 @@ Example:
 Download:
 
 - https://github.com/yandeu/ftp-upload/releases
+
+## GitHub Actions
+
+```yml
+- name: Download ftp-upload
+  run: |
+    curl -OL \
+      -H "Accept: application/octet-stream" \
+      -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"\
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://github.com/yandeu/ftp-upload/releases/download/v0.0.3/linux-gnu.zip
+
+- name: Run ftp-upload
+  run: |
+    unzip linux-gnu.zip
+    ./ftp-upload --dir 'www' --user '${{ secrets.USER }}' --password '${{ secrets.PASSWORD }}' --host '${{ secrets.HOST }}'
+```
