@@ -1,12 +1,10 @@
 use clap::Parser;
 use round::round_down;
-use std::sync::Arc;
 use std::{
     collections::BTreeMap,
     fs::{read_dir, File},
     io::BufReader,
 };
-use suppaftp::rustls::{self, ClientConfig};
 use suppaftp::FtpStream;
 
 #[derive(Parser, Debug)]
@@ -42,13 +40,10 @@ fn main() {
     let mut paths_created: BTreeMap<String, &str> = BTreeMap::new();
 
     let binding = args.host.split(':').collect::<Vec<&str>>();
-    let domain = &binding.first().unwrap();
+    let _domain = &binding.first().unwrap();
 
-    let config = Arc::new(rustls_config());
-    let mut ftp_stream = FtpStream::connect(&args.host)
-        .unwrap()
-        .into_secure(Arc::clone(&config).into(), domain)
-        .unwrap();
+    // Create a connection to an FTP server and authenticate to it.
+    let mut ftp_stream = FtpStream::connect(&args.host).unwrap();
     ftp_stream.login(&args.user, &args.password).unwrap();
 
     if !silent {
@@ -119,19 +114,4 @@ where
             }
         }
     }
-}
-
-fn rustls_config() -> ClientConfig {
-    let mut root_store = rustls::RootCertStore::empty();
-    root_store.add_server_trust_anchors(webpki_roots::TLS_SERVER_ROOTS.0.iter().map(|ta| {
-        rustls::OwnedTrustAnchor::from_subject_spki_name_constraints(
-            ta.subject,
-            ta.spki,
-            ta.name_constraints,
-        )
-    }));
-    ClientConfig::builder()
-        .with_safe_defaults()
-        .with_root_certificates(root_store)
-        .with_no_client_auth()
 }
