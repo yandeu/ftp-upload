@@ -49,7 +49,7 @@ fn main() {
     // Binary file transfer is supported
     ftp_stream.transfer_type(FileType::Binary).unwrap();
     // Support for IPV6
-    ftp_stream.set_mode(ExtendedPassive);
+    // ftp_stream.set_mode(ExtendedPassive);
 
     if !silent {
         println!("Uploading...");
