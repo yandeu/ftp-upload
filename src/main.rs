@@ -5,7 +5,7 @@ use std::{
     fs::{read_dir, File},
     io::BufReader,
 };
-use suppaftp::{types::FileType, FtpStream, Mode::ExtendedPassive};
+use suppaftp::{types::FileType, FtpStream};
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -48,8 +48,6 @@ fn main() {
     // https://github.com/veeso/suppaftp/issues/36
     // Binary file transfer is supported
     ftp_stream.transfer_type(FileType::Binary).unwrap();
-    // Support for IPV6
-    // ftp_stream.set_mode(ExtendedPassive);
 
     if !silent {
         println!("Uploading...");

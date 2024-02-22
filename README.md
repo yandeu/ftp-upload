@@ -39,7 +39,7 @@ Download:
       -H "Accept: application/octet-stream" \
       -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"\
       -H "X-GitHub-Api-Version: 2022-11-28" \
-      https://github.com/yandeu/ftp-upload/releases/download/v0.0.3/linux-gnu.zip
+      https://github.com/yandeu/ftp-upload/releases/download/v0.0.4/linux-gnu.zip
 
 - name: Run ftp-upload
   run: |
